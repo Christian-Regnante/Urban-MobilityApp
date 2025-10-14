@@ -19,6 +19,14 @@
    ```bash
    pip install -r requirements.txt
    ```
+**IMPORTANT**: 
+
+- Make sure to download the train.csv file and place it in the same directory as `cleaning_train_data.py` file.
+
+- Run the `cleaning_train_data.py` file to clean the CSV data and generate a new cleaned CSV file named `cleaned_trips_data.csv`:
+   ```bash
+   python cleaning_train_data.py
+   ```
 
 4. Set up the database connection:
    - Ensure you have MySQL workbench installed or any MySQL database server running.
