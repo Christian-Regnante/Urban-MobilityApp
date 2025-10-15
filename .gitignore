@@ -7,6 +7,11 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+cleaned_trips.csv
+excluded_records.log
+train.csv
+
+
 # C extensions
 *.so
 
