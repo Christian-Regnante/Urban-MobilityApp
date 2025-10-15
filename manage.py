@@ -4,7 +4,7 @@ from MySQLdb.constants import CLIENT    # Enable LOCAL INFILE client flag
 
 #  MySQL Login Details
 user = "root"
-password = "Nopassword#.1"
+password = "root"
 database = "urban_mobility"
 
 # Database connection

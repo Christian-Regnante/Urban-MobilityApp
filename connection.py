@@ -11,7 +11,7 @@ def connect_to_database():
             host="127.0.0.1",
             user="root",
             port=3306,
-            passwd="Nopassword#.1",
+            passwd="root",
             db="urban_mobility",
             # # enable LOCAL INFILE on the client side; server must also allow it
             # client_flag=CLIENT.LOCAL_FILES,

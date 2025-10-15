@@ -19,8 +19,8 @@ api = Blueprint('api', __name__)
 # Home routes
 @home.route('/')
 def index():
-    return "Welcome to the Urban Mobility App!"
-    # return render_template('index.html')
+    # return "Welcome to the Urban Mobility App!"
+    return render_template('index.html')
 
 
 # API routes
