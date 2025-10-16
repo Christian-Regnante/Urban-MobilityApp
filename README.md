@@ -177,6 +177,7 @@ Excluded 65 invalid records. Remaining: 1458579
 4  id0075470              1          0.000000        0.000000
 ```
 
+> After running `algorithms.py`, `cleaned_trips.csv` is created and can be imported using `manage.py`, and also `sorted_trips.csv` is created which shows a version of the data sorted by trip duration.
 ---
 
 ** YOUTUBE VIDEO DEMO: **
