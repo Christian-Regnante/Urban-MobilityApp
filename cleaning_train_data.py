@@ -52,9 +52,21 @@ def clean_data():
     df['trip_distance_km'] = df.apply(lambda r: haversine(
         r['pickup_longitude'], r['pickup_latitude'],
         r['dropoff_longitude'], r['dropoff_latitude']), axis=1)
+    
 
     df['trip_speed_kmh'] = df['trip_distance_km'] / (df['trip_duration'] / 3600)
     df['trip_speed_kmh'] = df['trip_speed_kmh'].replace([np.inf, -np.inf], np.nan)
+
+    # Trip distance category
+    def categorize_distance(d):
+        if d < 2:
+            return 'short'
+        elif d < 5:
+            return 'medium'
+        else:
+            return 'long'
+    
+    df['trip_distance_category'] = df['trip_distance_km'].apply(categorize_distance)
 
     df.dropna(subset=['trip_distance_km', 'trip_speed_kmh'], inplace=True)
     df.drop_duplicates(inplace=True)

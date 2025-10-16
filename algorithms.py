@@ -42,11 +42,11 @@ if __name__ == "__main__":
     trips = df[['id', 'trip_duration', 'trip_distance_km', 'trip_speed_kmh']].to_dict('records')
 
     # Sort manually using custom quicksort
-    cleaned_trips = quicksort_trips(trips)
+    sorted_trips = quicksort_trips(trips)
 
     # Convert back to DataFrame for output
-    sorted_df = pd.DataFrame(cleaned_trips)
-    sorted_df.to_csv("cleaned_trips.csv", index=False)
+    sorted_df = pd.DataFrame(sorted_trips)
+    sorted_df.to_csv("sorted_trips.csv", index=False)
 
-    print("\n✅ Sorting complete. Results saved as cleaned_trips.csv")
+    print("\n✅ Sorting complete. Results saved as sorted_trips.csv")
     print(sorted_df.head(5))
