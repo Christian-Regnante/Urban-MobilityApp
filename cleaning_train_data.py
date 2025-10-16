@@ -1,6 +1,24 @@
 import pandas as pd
 import numpy as np
 from math import radians, sin, cos, asin, sqrt
+import zipfile
+import os
+
+# Path to your zip file
+zip_file_path = "train.zip"
+
+# Directory where you want to extract files
+extract_dir = "."
+
+# Create the directory if it doesn't exist
+os.makedirs(extract_dir, exist_ok=True)
+
+# Open the zip file and extract all contents
+with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
+    zip_ref.extractall(extract_dir)
+
+print(f"{zip_file_path} was extracted successfully\n")
+
 
 #------------------------------------------------------- STEP 1: Load and Explore the Dataset
 # Load the dataset

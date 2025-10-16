@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, render_template, request
-# import MySQLdb
 from connection import connection
+from algorithms import quicksort_trips
 
 
 # Check if connection was successful
@@ -13,14 +13,14 @@ else:
 
 # Create blueprints
 home = Blueprint('home', __name__)
-api = Blueprint('api', __name__)
+api = Blueprint('api', __name__, template_folder="/templates", static_folder="/static")
 
 
 # Home routes
 @home.route('/')
 def index():
-    return "Welcome to the Urban Mobility App!"
-    # return render_template('index.html')
+    # return "Welcome to the Urban Mobility App!"
+    return render_template('index.html')
 
 
 # API routes
@@ -32,12 +32,11 @@ def api_home():
 @api.route('/trips', methods=['GET'])
 def get_data():
     cursor = connection.cursor()
-    cursor.execute("SELECT * FROM trips LIMIT 10")
+    cursor.execute("SELECT * FROM trips LIMIT 10000")
     rows = cursor.fetchall()
     cursor.close()
 
-     # Converting fetched data to a list of dictionaries for better JSON representation
-
+    # Converting fetched data to a list of dictionaries for better JSON representation
     trips = []
     for row in rows:
         trips.append({
@@ -61,3 +60,62 @@ def get_data():
         })
 
     return jsonify(trips)
+
+# API route: Filter trips
+@api.route('/trips/filter', methods=['GET'])
+def filter_trips():
+    vendor = request.args.get('vendor_id')
+    passengers = request.args.get('passenger_count')
+    start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
+
+    # cursor = connection.cursor(dictionary=True)
+    cursor = connection.cursor()
+
+    query = "SELECT * FROM trips LIMIT 1000 WHERE 1=1"
+    params = []
+
+    if vendor:
+        query += " AND vendor_id = %s"
+        params.append(vendor)
+    if passengers:
+        query += " AND passenger_count = %s"
+        params.append(passengers)
+    if start_date and end_date:
+        query += " AND pickup_datetime BETWEEN %s AND %s"
+        params.extend([start_date, end_date])
+
+    cursor.execute(query, params)
+    data = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    return jsonify(data)
+
+# API route: Average speed by hour
+@api.route('/api/insights/average_speed', methods=['GET'])
+def average_speed():
+    # cursor = connection.cursor(dictionary=True)
+    cursor = connection.cursor()
+    cursor.execute("""
+        SELECT HOUR(pickup_datetime) AS hour, 
+               ROUND(AVG(trip_speed_kmh), 2) AS avg_speed
+        FROM trips
+        GROUP BY hour
+        ORDER BY hour;
+    """)
+    data = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    return jsonify(data)
+
+
+# Fetching sorted trips by duration using QuickSort
+@api.route('/trips/sorted_by_duration')
+def sorted_trips():
+    cursor = connection.cursor()
+    cursor.execute("SELECT trip_id, trip_duration, trip_distance_km, trip_speed_kmh FROM trips LIMIT 3")
+    trips = cursor.fetchall()
+    cursor.close()
+
+    sorted_trips = quicksort_trips(trips)
+    return jsonify(sorted_trips)

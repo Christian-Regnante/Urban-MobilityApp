@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip Analytics Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
+    <script defer src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css')}}">
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <h1 class="dashboard-title">Trip Analytics Dashboard</h1>
+            <p class="dashboard-subtitle">Real-time transportation insights and visualization</p>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Left Sidebar - Filters -->
+            <aside class="filters-sidebar">
+                <div class="filters-header">
+                    <h2>Filters</h2>
+                    <button class="reset-btn" id="resetFilters">Reset</button>
+                </div>
+
+                <div class="filter-group">
+                    <label>Pickup Month</label>
+                    <select id="monthFilter" class="filter-select">
+                        <option value="">All Months</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Day of Week</label>
+                    <select id="dayFilter" class="filter-select">
+                        <option value="">All Days</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Distance Category</label>
+                    <select id="distanceFilter" class="filter-select">
+                        <option value="">All Categories</option>
+                        <option value="short">Short</option>
+                        <option value="medium">Medium</option>
+                        <option value="long">Long</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Vendor ID</label>
+                    <select id="vendorFilter" class="filter-select">
+                        <option value="">All Vendors</option>
+                    </select>
+                </div>
+
+                <button class="apply-btn" id="applyFilters">Apply Filters</button>
+            </aside>
+
+            <!-- Right Content Area -->
+            <div class="content-area">
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalTrips">0</div>
+                        <div class="stat-label">TOTAL TRIPS</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="avgDistance">0</div>
+                        <div class="stat-label">AVG DISTANCE (KM)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="avgDuration">0</div>
+                        <div class="stat-label">AVG DURATION (MIN)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="avgSpeed">0</div>
+                        <div class="stat-label">AVG SPEED (KM/H)</div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="charts-section">
+                    <div class="chart-container">
+                        <h3 class="chart-title">Average Trip Duration by Weekday</h3>
+                        <canvas id="durationChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3 class="chart-title">Trip Distance Distribution</h3>
+                        <canvas id="distanceChart"></canvas>
+                    </div>
+                    <div class="chart-container chart-wide">
+                        <h3 class="chart-title">Average Trip Speed by Month</h3>
+                        <canvas id="speedChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Data Table Section -->
+                <div class="table-section">
+                    <div class="table-header">
+                        <h3 class="section-title">Trip Details</h3>
+                        <span class="record-count" id="recordCount">0 trips found</span>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table" id="tripsTable">
+                            <thead>
+                                <tr>
+                                    <th>Trip ID</th>
+                                    <th>Pickup DateTime</th>
+                                    <th>Dropoff DateTime</th>
+                                    <th>Distance (km)</th>
+                                    <th>Duration (min)</th>
+                                    <th>Speed (km/h)</th>
+                                    <th>Vendor</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="pagination-container">
+                    <button id="prevPage" class="pagination-btn">Previous</button>
+                    <span id="pageInfo" class="page-info">Page 1 of 1</span>
+                    <button id="nextPage" class="pagination-btn">Next</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
