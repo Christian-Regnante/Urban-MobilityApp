@@ -34,7 +34,7 @@ This repository includes utilities to clean a raw CSV of trips, create a databas
 
    ```powershell
    python -m venv venv
-   .\venv\Scripts\Activate.ps1
+   .\venv\Scripts\Activate
    ```
 
 3. Install dependencies:
@@ -44,13 +44,13 @@ This repository includes utilities to clean a raw CSV of trips, create a databas
    ```
 
 4. Prepare the dataset:
-   - Place `train.csv` (or `train.zip`) in the project root. The cleaning script will extract `train.csv` if `train.zip` is present.
+   - By default, the train.csv is zipped inside train.zip.(Make sure the zip file is there)
 
    ```powershell
    python algorithms.py
    ```
 
-   This produces `cleaned_trips.csv` which `manage.py` expects when importing into the database.
+   This produces `cleaned_trips.csv` which `manage.py`expects when importing into the database and also other files(`sorted_trips.csv`, `excluded_records.csv`).
 
 5. Configure your database connection:
    - Edit `connection.py` and `manage.py` to set your MySQL server credentials (host, user, password, port, database).
@@ -85,9 +85,14 @@ This repository includes utilities to clean a raw CSV of trips, create a databas
 This repository's `manage.py` attempts to enable `local_infile` on the client and executes `LOAD DATA LOCAL INFILE`. Typical failure reasons and fixes:
 
 - Server disabled `local_infile` in MySQL config (most common):
-  - Edit `my.cnf` / `mysqld.cnf` or the server configuration and set:
+  - Find the MySQL server location in the program's location Edit `my.cnf` or `my.ini` / `mysqld.cnf` or the server configuration and set:
 
     ```ini
+    [client]
+    local_infile=1
+
+      .... (other client options)
+
     [mysqld]
     local_infile=1
     ```
@@ -180,6 +185,6 @@ Excluded 65 invalid records. Remaining: 1458579
 > After running `algorithms.py`, `cleaned_trips.csv` is created and can be imported using `manage.py`, and also `sorted_trips.csv` is created which shows a version of the data sorted by trip duration.
 ---
 
-** YOUTUBE VIDEO DEMO: **
+**YOUTUBE VIDEO DEMO:**
 
 [Urban Mobility App Demo](https://www.youtube.com/watch?v=3e5jv1n1HkY)
