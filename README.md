@@ -187,4 +187,4 @@ Excluded 65 invalid records. Remaining: 1458579
 
 **YOUTUBE VIDEO DEMO:**
 
-[Urban Mobility App Demo](https://www.youtube.com/watch?v=3e5jv1n1HkY)
+[Urban Mobility App Demo](https://youtu.be/hhGCt3BSt6k)
