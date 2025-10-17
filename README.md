@@ -21,6 +21,26 @@ This repository includes utilities to clean a raw CSV of trips, create a databas
 
 ---
 
+## Data Schema
+
+#### Trips Table
+   - trip_id: Auto-increment primary key
+   - vendor_id: Taxi company identifier
+   - pickup_datetime/dropoff_datetime: Trip timestamps
+   - pickup_longitude/dropoff_longtitude:Longitude coordinates
+   - pickup_latitude/dropoff_latitude: latitude coordinates
+   - store_and_fwd_flag: Y/N boolean
+   - trip_duration: Trip duration in minutes
+
+### Computed new columns (Auto-generated)
+   - pickup_time: Picked time from the actual date
+   - pickup_day_of_week: The day of related to pickup_datetime
+   - pickup_month: The month of that pickup_datetime
+   - trip_distance_km: calculated distance per trip
+   - trip_speed_kmh: calculated speed in km/h
+   - trip_distance_category: indicating distance categories(short, medium, and long)
+
+
 ## Quickstart (Windows, PowerShell)
 
 1. Clone the repository and open the folder:
@@ -80,7 +100,40 @@ This repository includes utilities to clean a raw CSV of trips, create a databas
 
 ## Database notes and troubleshooting
 
-### LOAD DATA LOCAL INFILE fails with "Loading local data is disabled"
+### 1. Database server Installation
+   - Download MySQL Workbench: https://dev.mysql.com/downloads/workbench/
+   - Install MySQL workbench, it comes with a server, it's CLI and GUI
+   - After the installation replace your connection credentials(host, user, password, and port) in the `connection.py` and `manage.py` files in the connection section
+   - Do the connection part before running `manage.py` file
+**Sample Demo of the connection part to change in `connection.py` and `manage.py`:**
+
+>`connection.py`
+```py
+   onnection = MySQLdb.connect(
+            host="127.0.0.1", # By default the host is 127.0.0.1 or localhost
+            user="root", # By default the user is root
+            port=3306, # default port is 3306, replace it if you have a different one
+            passwd="your password",
+            db="urban_mobility"
+        ) # Adjust according to your credentials
+```
+
+>`manage.py` you will the connection section, between line 14-24
+```py
+   # Database connection
+   conn = MySQLdb.connect(
+       host="127.0.0.1",
+       user=user,
+       passwd=password,
+       port=3306,
+       # Enable LOCAL INFILE on the client. Server must also allow it.
+       client_flag=CLIENT.LOCAL_FILES,
+       local_infile=1,
+   )
+   # The same configuration goes here, except here we don't assign any database.
+```
+
+### 2. LOAD DATA LOCAL INFILE fails with "Loading local data is disabled"
 
 This repository's `manage.py` attempts to enable `local_infile` on the client and executes `LOAD DATA LOCAL INFILE`. Typical failure reasons and fixes:
 
